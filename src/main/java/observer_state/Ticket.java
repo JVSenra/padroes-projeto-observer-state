@@ -4,6 +4,9 @@
  */
 package observer_state;
 import java.util.Observable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -14,15 +17,20 @@ public class Ticket extends Observable{
     private TicketEstado estado;
     private Pessoa solicitante;
 
-    public Ticket(Pessoa solicitante) {
+
+    public Ticket(String nome, Pessoa solicitante) {
         this.estado = TicketEstadoAberto.getInstance();
         this.solicitante = solicitante;
+        this.addObserver(solicitante);
+        this.nome = nome;
     }
     
     public void setEstado(TicketEstado estado) {
         this.estado = estado;
+        setChanged();
+        notifyObservers();
     }
-    
+
     public boolean abrir() {
         return estado.abrir(this);
     }
@@ -49,5 +57,9 @@ public class Ticket extends Observable{
 
     public TicketEstado getEstado() {
         return estado;
-    }    
+    }
+
+    public String toString() {
+        return "Ticket{"+ "nome=" + '\'' + this.nome+  '\'' + ", estado=" + '\''+ this.getNomeEstado()+ '\''+'}';
+    }
 }
